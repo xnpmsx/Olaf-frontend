@@ -1,21 +1,21 @@
-// import logo from './logo.svg';
-import './App.css';
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Home from './pages/Home';
+import About from './pages/About';
+import Contact from './pages/Contact';
 
-
-function App() {
-
-  // const c = "hello"
-  
-
+const App = () => {
   return (
-    <div className="container" >
-        <div className="card">
-          <div className="card-body">
-            <h1>web frame work Ep xxc</h1>
-          </div>  
-        </div>
-    </div>
+    <Router>
+      <div>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/contact" element={<Contact />} />
+        </Routes>
+      </div>
+    </Router>
   );
-}
+};
 
 export default App;
