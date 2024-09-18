@@ -1,19 +1,17 @@
 import React from 'react';
 import Navbar from '../components/Navbar';
 import Mininav from '../components/Mininav';
-import Footer from './Footer';
+import Footer from '../components/Footer';
 
-const Home = () => {
+export default function Home() {
+
   return (
     <>
       <Navbar />
       <div className='container'><br />
-
           <div className="row">
               <div className='col-8'>
-                  {/* <h2>Welcome to Blog No.1</h2> */}
                   <Mininav/>
-
                   <div className='col border-bottom'>
                     <div className='card' style={{border:'none'}}>
                       <div className='card-body'>
@@ -25,7 +23,8 @@ const Home = () => {
                               </h4>
                               <p style={{fontSize:'18px',opacity:'60%'}}>5 amazing new JavaScript features in ES15 (2024)</p>
                                   <p className='m-1' style={{fontSize:'12px'}}>
-                                    <img className='m-1' src='https://cdn4.iconfinder.com/data/icons/essentials-72/24/029_-_Star-512.png' 
+                                    <img className='m-1' 
+                                      src='https://cdn4.iconfinder.com/data/icons/essentials-72/24/029_-_Star-512.png' 
                                       alt='x'
                                       style={{width:'18px',height:'18px'}}
                                     />
@@ -233,4 +232,4 @@ const Home = () => {
     </>)
 };
 
-export default Home;
+
