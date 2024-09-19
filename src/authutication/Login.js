@@ -1,19 +1,29 @@
 import React, { useState } from 'react';
-
+import { jwtDecode } from 'jwt-decode';
 
 export default function Login() {
   // State to store form inputs
-  const [email, setEmail] = useState('');
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState(null); // State to handle errors
+  const [error, setError] = useState(null); 
 
+
+  const decodeToken = (token) => {
+    try {
+      const decoded = jwtDecode(token);
+      return decoded;
+    } catch (error) {
+      console.error("Invalid token:", error);
+    }
+  };
+  
   // Handler for form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     // Create the payload
     const payload = {
-      username: email, // Adjust according to your API (username or email)
+      username: username, // Adjust according to your API (username or email)
       password: password
     };
 
@@ -34,11 +44,14 @@ export default function Login() {
       // Parse the JSON response
       const data = await response.json();
 
-      // Store the access token in localStorage or sessionStorage
-      localStorage.setItem('access_token', data.access);
+      localStorage.setItem('token', data.token);
+      const token = localStorage.getItem('token');
+      decodeToken(token)
+
 
       // Optionally redirect or do something after successful login
       console.log('Login successful');
+      window.location.href='/Feed';
       setError(null); // Clear any previous errors
 
     } catch (error) {
@@ -69,15 +82,15 @@ export default function Login() {
                   <h3 className='crimson-text-bold-italic' style={{fontSize:'80px'}}>Sign in</h3>
                   <form onSubmit={handleSubmit}>
                     <div className="mb-3">
-                      <label htmlFor="exampleInputEmail1" 
+                      <label htmlFor="exampleInputUsername1" 
                         className="form-label">Username</label>
                       <input
                         type="text"
                         className="form-control"
-                        id="exampleInputEmail1"
-                        aria-describedby="emailHelp"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)} // Update state on change
+                        id="exampleInputUsername1"
+                        aria-describedby="userNameHelp"
+                        value={username}
+                        onChange={(e) => setUsername(e.target.value)} // Update state on change
                       />
                       {/* <div id="emailHelp" 
                         className="form-text">We'll never share your email with anyone else.</div> */}

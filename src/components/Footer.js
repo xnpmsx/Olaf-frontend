@@ -3,7 +3,7 @@ import React from 'react'
 export default function Footer() {
   return (
     <>
-        <br/>
+      
             <div className='container'>
                 <ul class="nav nav-pills" style={{fontSize:'16px'}}>
                     <li class="nav-item">
