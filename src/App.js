@@ -7,21 +7,24 @@ import Login from './authutication/Login';
 import Register from './authutication/Register';
 import Feed from './pages/Feed';
 import ProtectedRoute from './authutication/ProtectedRoute';
+import View from './posts/View/Views';
 
 const App = () => {
   
   return (
     <Router>
-      <div>
+      
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/Feed" element={<Feed/>} />
           <Route path="/about" element={ProtectedRoute(<About />)} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/view/:id" element={<View />} />
+
           <Route path="/Login" element={<Login />} />
           <Route path="/Register" element={<Register />} />
         </Routes>
-      </div>
+      
     </Router>
   );
 };

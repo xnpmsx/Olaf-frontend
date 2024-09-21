@@ -1,3 +1,22 @@
+* {
+  box-sizing: border-box;
+}
+/* set img cards */
+.cardimgcs1{
+  height:200px;
+  
+  object-fit:cover;
+}
+.cardimgcs2{
+  height:200px;
+  object-fit:cover;
+}
+
+.iconsize{
+  width: 18px; 
+  height: 18px;
+}
+
 .App {
   text-align: center;
 }

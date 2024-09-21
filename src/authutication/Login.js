@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { jwtDecode } from 'jwt-decode';
+const baseUrl = process.env.REACT_APP_BASE_URL;
 
 export default function Login() {
-  // State to store form inputs
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState(null); 
@@ -29,7 +29,7 @@ export default function Login() {
 
     try {
       // Send POST request to login API endpoint
-      const response = await fetch('http://127.0.0.1:8000/api/auth/login/', {
+      const response = await fetch(`${baseUrl}/auth/login/`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
