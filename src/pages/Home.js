@@ -1,10 +1,9 @@
 import React from 'react';
-import Navbar from '../components/Navbar';
-import Mininav from '../components/Mininav';
+import Navbar from '../components/Nav/Navbar';
+import Mininav from '../components/Nav/Mininav';
 import Footer from '../components/Footer';
 
 export default function Home() {
-
   return (
     <>
       <Navbar />
