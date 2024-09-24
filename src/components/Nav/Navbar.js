@@ -5,6 +5,8 @@ export default function Navbar() {
 
     const loginpage = () =>{window.location.href='./Login'}
 
+    const s  = `; ${document.cookie}`;
+
     return (
         <>
             <nav className="navbar border-bottom border-dark" 
@@ -16,10 +18,10 @@ export default function Navbar() {
                     </span>
 
                 <div className='d-flex'>
-                    <button className='btn btn-success m-1' 
-                        style={{fontSize:'16px'}}>Sing up</button>
+                    <button className='btn btn-success m-1'
+                        style={s? {display:'none'}:{fontSize:'16px'}}>Sing up</button>
                     <button className='btn btn-outline-dark m-1' 
-                        style={{fontSize:'16px'}} 
+                        style={s? {display:'none'}:{fontSize:'16px'}} 
                         onClick={loginpage}>Sing in</button>
                 </div>
                     

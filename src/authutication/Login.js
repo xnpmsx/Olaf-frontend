@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { jwtDecode } from 'jwt-decode';
+import { Navigate } from 'react-router-dom';
 const baseUrl = process.env.REACT_APP_BASE_URL;
 
 export default function Login() {
@@ -20,40 +21,42 @@ export default function Login() {
   // Handler for form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
     // Create the payload
     const payload = {
       username: username, // Adjust according to your API (username or email)
       password: password
     };
-
+  
     try {
       // Send POST request to login API endpoint
       const response = await fetch(`${baseUrl}/auth/login/`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          
         },
+        credentials: 'include',
+         // Important: include cookies in the request
         body: JSON.stringify(payload),
       });
-
+  
       if (!response.ok) {
         throw new Error('Login failed');
       }
-
-      // Parse the JSON response
-      const data = await response.json();
-
-      localStorage.setItem('token', data.token);
-      const token = localStorage.getItem('token');
-      decodeToken(token)
-
-
+  
+      // Optionally decode the token from cookies
+      const token = document.cookie.split('; ').find(row => row.startsWith('access_token='));
+      if (token) {
+        const decoded = decodeToken(token.split('=')[1]);
+        console.log('Decoded Token:', decoded);
+      }
+  
       // Optionally redirect or do something after successful login
       console.log('Login successful');
-      window.location.href='/Feed';
+      window.location.href='./Feed'
       setError(null); // Clear any previous errors
-
+  
     } catch (error) {
       console.error('Error:', error);
       setError('Login failed. Please check your credentials.');

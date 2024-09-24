@@ -21,38 +21,45 @@ export default function Feed() {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const response = await fetch(`${baseUrl}/posts/`, {
-          method: 'GET',
+        // Fetch posts
+        const [postResponse, userResponse] = await Promise.all([
+          fetch(`${baseUrl}/posts/`, { method: 'GET' }),
+          fetch(`${baseUrl}/users/`, { method: 'GET' }),
+        ]);
+  
+        // Handle posts response
+        if (!postResponse.ok) throw new Error('Fetching posts failed');
+        const postData = await postResponse.json();
+  
+        // Handle users response
+        if (!userResponse.ok) throw new Error('Fetching users failed');
+        const userData = await userResponse.json();
+  
+        // Update posts with user data (first name and last name)
+        const updatedPosts = postData.map(post => {
+          const matchingUser = userData.find(user => user.id === post.user);
+          if (matchingUser) {
+            return { ...post, user: `${matchingUser.first_name} ${matchingUser.last_name}` };
+          }
+          return post;
         });
   
-        if (!response.ok) {
-          throw new Error('Fetching posts failed');
-        }
-  
-        const data = await response.json();
-  
-        const calculateTimePassed = (postDate) => {
+        // Calculate time passed since post creation
+        const calculateTimePassed = postDate => {
           const postDateTime = new Date(postDate);
           const now = new Date();
   
           const timeDiff = now - postDateTime;
-          const diffHours = Math.floor(timeDiff / (1000 * 60 * 60)); 
-          // Convert timeDiff from milliseconds to hours
-          const diffMinutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60)); 
-          // Calculate remaining minutes
+          const diffHours = Math.floor(timeDiff / (1000 * 60 * 60)); // Hours
+          const diffMinutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60)); // Minutes
   
           if (diffHours < 24) {
-            if (diffHours === 0) {
-              return `${diffMinutes} minutes ago`;
-            }
+            if (diffHours === 0) return `${diffMinutes} minutes ago`;
             return `${diffHours} hours and ${diffMinutes} minutes ago`;
           } else {
-            const diffDays = Math.floor(timeDiff / (1000 * 60 * 60 * 24)); 
-            // Convert timeDiff from milliseconds to days
-  
-            if (diffDays < 30) {
-              return `${diffDays} days ago`;
-            } else if (diffDays < 365) {
+            const diffDays = Math.floor(timeDiff / (1000 * 60 * 60 * 24)); // Days
+            if (diffDays < 30) return `${diffDays} days ago`;
+            else if (diffDays < 365) {
               const diffMonths = Math.floor(diffDays / 30);
               return `${diffMonths} months ago`;
             } else {
@@ -62,28 +69,25 @@ export default function Feed() {
           }
         };
   
-        // Map the data to include specific fields and calculate time passed
-        const filteredData = data.map(post => ({
+        // Map post data to include necessary fields and time passed
+        const processedPosts = updatedPosts.map(post => ({
           post_id: post.post_id,
           user: post.user,
           header: post.header,
           short: post.short,
-          image: post.image,
-          post_datetime: calculateTimePassed(post.post_datetime), 
-          // Calculate the elapsed time with hours and minutes
+          image: post.image , // Default image if none
+          post_datetime: calculateTimePassed(post.post_datetime),
         }));
   
+        // Limit to latest 10 posts
+        const latestPosts = processedPosts.slice(-10);
   
-        // Limit to the latest 10 posts
-        const latestPosts = filteredData.length > 10 ? filteredData.slice(-10) : filteredData;
-  
-        setp_data(latestPosts);
-  
+        setp_data(latestPosts); // Set post data
         // Set valid images after fetching data
         const validImages = latestPosts.map(post => post.image || 
           'https://miro.medium.com/v2/resize:fit:1100/format:webp/1*1Eq0WTubrn1gd_NofdVtJg.png');
+
         setImgSrcs(validImages);
-  
       } catch (error) {
         console.error('Error:', error);
         setError('Fetching posts failed. Please try again.');
@@ -91,43 +95,9 @@ export default function Feed() {
     };
   
     fetchPosts();
-  }, []); // Run only on component mount
+  }, []); // Runs once when the component is mounted
   
-  useEffect(() => {
-    if (p_data.length > 0) { // Ensure posts data is available before trying to fetch user data
-      const fetchUserData = async () => {
-        try {
-          const response = await fetch(`${baseUrl}/users/`, {
-            method: 'GET',
-          });
-  
-          if (!response.ok) {
-            throw new Error('Fetching users failed');
-          }
-  
-          const userData = await response.json();
-  
-          // Update p_data with user's first name and last name
-          const updatedPosts = p_data.map(post => {
-            const matchingUser = userData.find(user => user.id === post.user);
-            if (matchingUser) {
-              return { ...post, user: `${matchingUser.first_name} ${matchingUser.last_name}` };
-            }
-            return post; // Return the post as is if no matching user is found
-          });
-  
-          setp_data(updatedPosts);
-  
-        } catch (error) {
-          console.error('Error:', error);
-          setError('Fetching users failed. Please try again.');
-        }
-      };
-  
-      fetchUserData();
-    }
-  }, [p_data]); // Run when p_data (the post data) changes
-  
+ 
 
   return (
     <>
