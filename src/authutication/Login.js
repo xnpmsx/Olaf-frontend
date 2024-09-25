@@ -1,67 +1,74 @@
-import React, { useState } from 'react';
-import { jwtDecode } from 'jwt-decode';
-import { Navigate } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+// import { jwtDecode } from 'jwt-decode';
+// import { Navigate } from 'react-router-dom';
 const baseUrl = process.env.REACT_APP_BASE_URL;
 
-export default function Login() {
+const Login = ( ) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState(null); 
 
-
-  const decodeToken = (token) => {
-    try {
-      const decoded = jwtDecode(token);
-      return decoded;
-    } catch (error) {
-      console.error("Invalid token:", error);
-    }
-  };
-  
-  // Handler for form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
   
-    // Create the payload
     const payload = {
-      username: username, // Adjust according to your API (username or email)
-      password: password
+      username: username,
+      password: password,
     };
   
     try {
-      // Send POST request to login API endpoint
-      const response = await fetch(`${baseUrl}/auth/login/`, {
-        method: 'POST',
+      // ส่งคำขอ login
+      const response = await axios.post(`${baseUrl}/auth/login/`, payload, {
+        withCredentials: true, // Include cookies for session management
         headers: {
           'Content-Type': 'application/json',
-          
         },
-        credentials: 'include',
-         // Important: include cookies in the request
-        body: JSON.stringify(payload),
       });
   
-      if (!response.ok) {
-        throw new Error('Login failed');
-      }
+      console.log('Login successful:', response.data);
   
-      // Optionally decode the token from cookies
-      const token = document.cookie.split('; ').find(row => row.startsWith('access_token='));
-      if (token) {
-        const decoded = decodeToken(token.split('=')[1]);
-        console.log('Decoded Token:', decoded);
-      }
+      // ดึง access token จากการ login
+      // const accessToken = response.data.access;
+      sessionStorage.setItem('accessToken',`${response.data.access}`);
+
+      localStorage.setItem('accessToken',`${response.data.access}`);
+     
+      // const TKs = localStorage.getItem('accessToken');
+
+      //   const getCookie = (name) => {
+      //     const value = `; ${document.cookie}`;
+      //     const parts = value.split(`; ${name}=`);
+      //     if (parts.length === 2) return parts.pop().split(';').shift();
+      //     return null; // Return null if the cookie doesn't exist
+      // };
+      // const accessToken = getCookie('access_token'); 
+      // console.log(accessToken);
+      // window.location.href = '/Feed';
+      // ส่ง access token ใน header
+      // const checkResponse = await axios.get(`${baseUrl}/auth/check/`, {
+      //   headers: {
+      //     'Authorization': `Bearer ${accessToken}`, // ส่ง token ใน header
+      //   },
+      //   withCredentials: true,
+      // });
   
-      // Optionally redirect or do something after successful login
-      console.log('Login successful');
-      window.location.href='./Feed'
-      setError(null); // Clear any previous errors
-  
+      // if (checkResponse.status === 200) {
+      //   console.log('User is authenticated:', checkResponse.data);
+        
+      //   // ย้ายไปที่หน้า Feed
+        window.location.href = '/Feed';
+
+      // } else {
+      //   console.log('User is not authenticated');
+      // }
     } catch (error) {
-      console.error('Error:', error);
-      setError('Login failed. Please check your credentials.');
+      console.error('Error during login or authentication check:', error);
+      setError('Login failed. Please check your credentials and try again.');
     }
   };
+  
+  
 
   return (
     <>
@@ -152,3 +159,4 @@ export default function Login() {
     </>
   );
 }
+export default Login;

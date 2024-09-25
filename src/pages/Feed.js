@@ -3,6 +3,7 @@ import Navbar from '../components/Nav/Navbar'
 import Navtype from '../components/Nav/Navtype'
 import Footer from '../components/Footer';
 import { Iconpath } from '../components/Iconpath';
+import { Navigate } from 'react-router-dom';
 const baseUrl = process.env.REACT_APP_BASE_URL;
 
 export default function Feed() {
@@ -18,13 +19,14 @@ export default function Feed() {
     window.location.href =`/view/${s}`
   }
 
+
   useEffect(() => {
     const fetchPosts = async () => {
       try {
         // Fetch posts
         const [postResponse, userResponse] = await Promise.all([
-          fetch(`${baseUrl}/posts/`, { method: 'GET' }),
-          fetch(`${baseUrl}/users/`, { method: 'GET' }),
+          fetch(`${baseUrl}/posts/`, { method: 'GET' ,withCredentials: true,credentials: 'include'}),
+          fetch(`${baseUrl}/users/`, { method: 'GET' ,withCredentials: true,credentials: 'include'}),
         ]);
   
         // Handle posts response
@@ -95,183 +97,188 @@ export default function Feed() {
     };
   
     fetchPosts();
-  }, []); // Runs once when the component is mounted
+  }, []);
   
  
 
   return (
     <>
-      <Navbar />
+      
+        <>
+          <Navbar />
+          <div className='container' >
+            <br />
+            <Navtype /><br />
 
-      <div className='container' >
-        <br />
-        <Navtype /><br />
+            <h1 style={{ textAlign: 'center', fontWeight: 'bold' }}>Explore topics</h1><br />
 
-        <h1 style={{ textAlign: 'center', fontWeight: 'bold' }}>Explore topics</h1><br />
+            <div className='container'>
+              <center>
+                <div class="input-group mb-3 " style={{ width: '75%' }}>
+                  <span class="input-group-text" id="basic-addon1"><i class="bi bi-search"></i></span>
+                  <input className='form-control'
+                    placeholder='Search . . .'
+                  />
+                </div><br />
+                <p style={{ fontSize: '16px' }}>Reccommend : Programming Data Science Technology</p>
+              </center>
+            </div><br /><br /><br /><br />
 
-        <center>
-          <div class="input-group mb-3 " style={{ width: '750px' }}>
-            <span class="input-group-text" id="basic-addon1"><i class="bi bi-search"></i></span>
-            <input className='form-control'
-              placeholder='Search . . .'
-            />
-          </div><br />
-          <p style={{ fontSize: '16px' }}>Reccommend : Programming Data Science Technology</p>
-        </center><br /><br /><br /><br />
+          </div><hr />
 
-      </div><hr />
+          <div className='container' >
 
-      <div className='container' >
+            <div className='row ' >
+              {p_data ? (
+                p_data
+                  .filter(post => post.post_id < 3)
+                  .map((post, index) => (<>
+                    <div className='col-sm-6' key={post.post_id}>
+                      <div className='card border border-dark shadow-sm h-100'
+                        style={{ border: 'none' }}>
 
-        <div className='row ' >
-          {p_data ? (
-            p_data
-              .filter(post => post.post_id < 3)
-              .map((post, index) => (<>
-                <div className='col-sm-6' key={post.post_id}>
-                  <div className='card border border-dark shadow-sm h-100'
-                    style={{ border: 'none' }}>
-
-                    <img className='
-                              img-fluid 
-                              card-img-top 
-                              cardimgcs1 '
-                      src={imgSrc[index]}
-                      alt='x'
-                      onClick={() => redirect(post.post_id)}
-                    />
-                    <div className='card-body'>
-
-                      <p className='card-title'
-                        style={{ fontSize: '16px'  }}>
-                          <i class="bi bi-person-circle"></i> {post.user}</p>
-
-                      <h4 class="card-title"
-                        style={{ fontWeight: 'bold', fontSize: '24px' }}>
-                        {post.header}
-                      </h4>
-
-                      <p className='card-text'
-                        style={{ fontSize: '18px', opacity: '60%' }}>
-                        {post.short}
-                      </p>
-
-                      <p className='card-text'
-                        style={{ fontSize: '12px' }}>
-
-                        <img className='m-1 iconsize'
-                          src={star}
+                        <img className='
+                                  img-fluid 
+                                  card-img-top 
+                                  cardimgcs1 '
+                          src={imgSrc[index]}
                           alt='x'
+                          onClick={() => redirect(post.post_id)}
                         />
+                        <div className='card-body'>
 
-                        <span className='card-text'
-                          style={{ fontWeight: 'bold' }}> {post.post_datetime}</span>
+                          <p className='card-title'
+                            style={{ fontSize: '16px'  }}>
+                              <i class="bi bi-person-circle"></i> {post.user}</p>
 
-                        <img className='m-1 iconsize'
-                          src={Like}
-                          alt='x'
-                        />
+                          <h4 class="card-title"
+                            style={{ fontWeight: 'bold', fontSize: '24px' }}>
+                            {post.header}
+                          </h4>
 
-                        <span className='card-text'> 1.5k </span>
+                          <p className='card-text'
+                            style={{ fontSize: '18px', opacity: '60%' }}>
+                            {post.short}
+                          </p>
 
-                        <img className='m-1 iconsize'
-                          src={comment}
-                          alt='x'
-                        />
+                          <p className='card-text'
+                            style={{ fontSize: '12px' }}>
 
-                        <span className='card-text'> 15 </span>
+                            <img className='m-1 iconsize'
+                              src={star}
+                              alt='x'
+                            />
 
-                      </p>
+                            <span className='card-text'
+                              style={{ fontWeight: 'bold' }}> {post.post_datetime}</span>
+
+                            <img className='m-1 iconsize'
+                              src={Like}
+                              alt='x'
+                            />
+
+                            <span className='card-text'> 1.5k </span>
+
+                            <img className='m-1 iconsize'
+                              src={comment}
+                              alt='x'
+                            />
+
+                            <span className='card-text'> 15 </span>
+
+                          </p>
+                        </div>
+                      </div>
+
                     </div>
-                  </div>
+                  </>
+                  ))
+              ) : (
+                <p>No posts available {error}</p>
+              )}
+            </div><br/>
 
-                </div>
-              </>
-              ))
-          ) : (
-            <p>No posts available {error}</p>
-          )}
-        </div><br/>
+            <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
+              {p_data ? (
+                p_data
+                  .filter(post => post.post_id > 2)
+                  .map((post, index) => (<>
 
-        <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
-          {p_data ? (
-            p_data
-              .filter(post => post.post_id > 2)
-              .map((post, index) => (<>
-
-                <div className='col '>
-                  <div className='card border border-dark shadow-sm 
-                  h-100' style={{ border: 'none' }}>
-                    <img className='img-fluid card-img-top cardimgcs2'
-                      src={imgSrc[index]}
-                      alt='x'
-                    />
-                    <div className='card-body'>
-
-                      <p className='card-text'
-                        style={{ fontSize: '14px' }}>
-                        <i class="bi bi-person-circle"></i> {post.user}
-                      </p>
-
-                      <h4
-                        style={{
-                          fontWeight: 'bold',
-                          fontSize: '24px'
-                        }}>
-                        {post.header}
-                      </h4>
-
-
-                      <p className='card-text'
-                        style={{
-                          fontSize: '18px',
-                          opacity: '60%'
-                        }}>
-                        {post.short}
-                      </p>
-
-                      <p className='card-text'
-                        style={{ fontSize: '12px' }}>
-
-                        <img className='m-1 iconsize'
-                          src={star}
+                    <div className='col '>
+                      <div className='card border border-dark shadow-sm 
+                      h-100' style={{ border: 'none' }}>
+                        <img className='img-fluid card-img-top cardimgcs2'
+                          src={imgSrc[index]}
                           alt='x'
                         />
+                        <div className='card-body'>
 
-                        <span className='card-text'
-                          style={{ fontWeight: 'bold' }}>
-                          {post.post_datetime}
-                        </span>
+                          <p className='card-text'
+                            style={{ fontSize: '14px' }}>
+                            <i class="bi bi-person-circle"></i> {post.user}
+                          </p>
 
-                        <img className='m-1 iconsize'
-                          src={Like}
-                          alt='x'
-                        />
+                          <h4
+                            style={{
+                              fontWeight: 'bold',
+                              fontSize: '24px'
+                            }}>
+                            {post.header}
+                          </h4>
 
-                        <span className='card-text'> 1.5k </span>
 
-                        <img className='m-1 iconsize'
-                          src={comment}
-                          alt='x' />
+                          <p className='card-text'
+                            style={{
+                              fontSize: '18px',
+                              opacity: '60%'
+                            }}>
+                            {post.short}
+                          </p>
 
-                        <span className='card-text'> 15 </span>
-                      </p>
+                          <p className='card-text'
+                            style={{ fontSize: '12px' }}>
+
+                            <img className='m-1 iconsize'
+                              src={star}
+                              alt='x'
+                            />
+
+                            <span className='card-text'
+                              style={{ fontWeight: 'bold' }}>
+                              {post.post_datetime}
+                            </span>
+
+                            <img className='m-1 iconsize'
+                              src={Like}
+                              alt='x'
+                            />
+
+                            <span className='card-text'> 1.5k </span>
+
+                            <img className='m-1 iconsize'
+                              src={comment}
+                              alt='x' />
+
+                            <span className='card-text'> 15 </span>
+                          </p>
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                </div>
-              </>
-              ))
-          ) : (
-            <p>No posts available</p>
-          )}
-        </div>
+                  </>
+                  ))
+              ) : (
+                <p>No posts available</p>
+              )}
+            </div>
 
 
-        {/* <Mostview/> */}
-      </div>
+            {/* <Mostview/> */}
+          </div>
 
-      <hr />
-      <Footer />
+          <hr />
+          <Footer />
+        </>
+      
     </>
   )
 }

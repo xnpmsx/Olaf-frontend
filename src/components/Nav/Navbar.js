@@ -5,7 +5,7 @@ export default function Navbar() {
 
     const loginpage = () =>{window.location.href='./Login'}
 
-    const s  = `; ${document.cookie}`;
+    const TKs = sessionStorage.getItem('accessToken');
 
     return (
         <>
@@ -19,9 +19,9 @@ export default function Navbar() {
 
                 <div className='d-flex'>
                     <button className='btn btn-success m-1'
-                        style={s? {display:'none'}:{fontSize:'16px'}}>Sing up</button>
+                        style={TKs? {display:'none'}:{fontSize:'16px'}}>Sing up</button>
                     <button className='btn btn-outline-dark m-1' 
-                        style={s? {display:'none'}:{fontSize:'16px'}} 
+                        style={TKs? {display:'none'}:{fontSize:'16px'}} 
                         onClick={loginpage}>Sing in</button>
                 </div>
                     
