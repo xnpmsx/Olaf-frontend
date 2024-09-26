@@ -9,7 +9,7 @@ export default function ProtectedRoute( children ) {
 
   const [isAuthenticated, setIsAuthenticated] = useState(null); // เริ่มต้นเป็น null เพื่อแสดงว่าเรายังไม่รู้สถานะการพิสูจน์ตัวตน
 
-  const TKs = localStorage.getItem('accessToken');
+  // const TKs = localStorage.getItem('accessToken');
 
   useEffect(() => {
     const checkAuthentication = async () => {

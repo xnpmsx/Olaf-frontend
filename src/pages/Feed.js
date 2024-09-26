@@ -18,8 +18,6 @@ export default function Feed() {
   const redirect = (s) =>{
     window.location.href =`/view/${s}`
   }
-
-
   useEffect(() => {
     const fetchPosts = async () => {
       try {

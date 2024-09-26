@@ -1,55 +1,83 @@
-import React ,{useState} from 'react'
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+// import { jwtDecode } from 'jwt-decode';
+// import { Navigate } from 'react-router-dom';
 const baseUrl = process.env.REACT_APP_BASE_URL;
 
-export default function Register() {
-
-  // State to store form inputs
-  const [email, setEmail] = useState('');
+const Login = ( ) => {
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState(null); // State to handle errors
+  const [error, setError] = useState(null); 
 
-  // Handler for form submission
+  const navigate = useNavigate();
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    // Create the payload
+  
     const payload = {
-      username: email, // Adjust according to your API (username or email)
-      password: password
+      username: username,
+      password: password,
     };
-
+  
     try {
-      // Send POST request to login API endpoint
-      const response = await fetch(`${baseUrl}/auth/login/`, {
-        method: 'POST',
+      // ส่งคำขอ login
+      const response = await axios.post(`${baseUrl}/auth/login/`, payload, {
+        withCredentials: true, // Include cookies for session management
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(payload),
       });
+  
+      console.log('Login successful:', response.data);
+  
+      // ดึง access token จากการ login
+      // const accessToken = response.data.access;
+      // sessionStorage.setItem('accessToken',`${response.data.access}`);
 
-      if (!response.ok) {
-        throw new Error('Login failed');
-      }
+      // localStorage.setItem('accessToken',`${response.data.access}`);
+     
+      // const TKs = localStorage.getItem('accessToken');
 
-      // Parse the JSON response
-      const data = await response.json();
+      //   const getCookie = (name) => {
+      //     const value = `; ${document.cookie}`;
+      //     const parts = value.split(`; ${name}=`);
+      //     if (parts.length === 2) return parts.pop().split(';').shift();
+      //     return null; // Return null if the cookie doesn't exist
+      // };
+      // const accessToken = getCookie('access_token'); 
+      // console.log(accessToken);
+      // window.location.href = '/Feed';
+      // ส่ง access token ใน header
+      // const checkResponse = await axios.get(`${baseUrl}/auth/check/`, {
+      //   headers: {
+      //     'Authorization': `Bearer ${accessToken}`, // ส่ง token ใน header
+      //   },
+      //   withCredentials: true,
+      // });
+  
+      // if (checkResponse.status === 200) {
+      //   console.log('User is authenticated:', checkResponse.data);
+        
+      //   // ย้ายไปที่หน้า Feed
+        // window.location.href = '/Feed';
+        // navigator('/Feed');
+      navigate("/Feed");
 
-      // Store the access token in localStorage or sessionStorage
-      localStorage.setItem('access_token', data.access);
-
-      // Optionally redirect or do something after successful login
-      console.log('Login successful');
-      setError(null); // Clear any previous errors
-
+      // } else {
+      //   console.log('User is not authenticated');
+      // }
     } catch (error) {
-      console.error('Error:', error);
-      setError('Login failed. Please check your credentials.');
+      console.error('Error during login or authentication check:', error);
+      setError('Login failed. Please check your credentials and try again.');
     }
   };
+  
+  
 
   return (
-    <div className='container-fluid'>
+    <>
+      <div className='container-fluid'>
         <div className='row'>
           <div className='col'>
             <div className='border-end' style={{marginTop: '220px'}}>
@@ -69,15 +97,15 @@ export default function Register() {
                   <h3 className='crimson-text-bold-italic' style={{fontSize:'80px'}}>Sign in</h3>
                   <form onSubmit={handleSubmit}>
                     <div className="mb-3">
-                      <label htmlFor="exampleInputEmail1" 
+                      <label htmlFor="exampleInputUsername1" 
                         className="form-label">Username</label>
                       <input
                         type="text"
                         className="form-control"
-                        id="exampleInputEmail1"
-                        aria-describedby="emailHelp"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)} // Update state on change
+                        id="exampleInputUsername1"
+                        aria-describedby="userNameHelp"
+                        value={username}
+                        onChange={(e) => setUsername(e.target.value)} // Update state on change
                       />
                       {/* <div id="emailHelp" 
                         className="form-text">We'll never share your email with anyone else.</div> */}
@@ -133,5 +161,7 @@ export default function Register() {
         
 
       </div>
-  )
+    </>
+  );
 }
+export default Login;
