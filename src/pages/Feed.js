@@ -103,7 +103,7 @@ export default function Feed() {
     <>
       
         <>
-          <Navbar />
+          {/* <Navbar /> */}
           <div className='container' >
             <br />
             <Navtype /><br />

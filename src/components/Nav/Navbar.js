@@ -27,7 +27,7 @@ export default function Navbar() {
 
                     <button className='btn btn-outline-dark m-1' 
                         style={TKs? {display:'none'}:{fontSize:'16px'}} >
-                        <NavLink className={'nav-link'} to={'/auth/usermidlw'}>
+                        <NavLink className={'nav-link'} to={'/auth/user'}>
                             Logout
                         </NavLink>
                     </button>

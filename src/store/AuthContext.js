@@ -18,7 +18,6 @@ export function AuthContextProvider(props) {
     const [accessToken, setAccessToken] = useState()
     const [refreshToken, setRefreshToken] = useState()
     const [csrftoken, setCSRFToken] = useState()
-    
 
     return <AuthContext.Provider value={{
         user, setUser,

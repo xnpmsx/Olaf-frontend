@@ -21,31 +21,19 @@ export default function User() {
         navigate('/')
     }
 
-    async function updateUser() {
-        setLoading(true)
-        const { data } = await axiosPrivateInstance.get('auth/user')
-        setUser(data)
-        setLoading(false)
-    }
-
     useEffect(() => {
-        updateUser()
+        async function getUser() {
+            const { data } = await axiosPrivateInstance.get('auth/user')
+            setUser(data)
+        }
+
+        getUser()
     }, [])
-
-    useEffect(() => {
-        const interval = setInterval(() => {
-            if (!loading) {
-                updateUser()
-            }
-        }, 10000);
-
-        return () => clearInterval(interval);
-    }, [loading]);
 
     return (
         <div>
-            <h3>{loading ? 'Loading...' : user?.username}</h3>
-            <h4>{loading ? 'Loading...' : user?.email}</h4>
+            <h3>{user?.username}</h3>
+            <h4>{user?.email}</h4>
             <button disabled={loading} type='button' onClick={onLogout}>Logout</button>
         </div>
     )
