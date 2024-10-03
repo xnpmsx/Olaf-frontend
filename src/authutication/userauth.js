@@ -4,7 +4,6 @@ import useAuth from '../hook/useAuth'
 import useAxiosPrivate from "../hook/useAxiosPrivate"
 import useLogout from "../hook/useLogout"
 
-
 export default function User() {
 
     const { user, setUser } = useAuth()
@@ -17,6 +16,7 @@ export default function User() {
         e.preventDefault();
         setLoading(true)
 
+        // localStorage.clear('us');
         await logout()
         navigate('/')
     }
@@ -26,7 +26,6 @@ export default function User() {
             const { data } = await axiosPrivateInstance.get('auth/user')
             setUser(data)
         }
-
         getUser()
     }, [])
 

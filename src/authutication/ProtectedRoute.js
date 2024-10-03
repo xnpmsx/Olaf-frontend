@@ -7,7 +7,8 @@ const baseUrl = process.env.REACT_APP_BASE_URL;
 
 export default function ProtectedRoute( children ) {
 
-  const [isAuthenticated, setIsAuthenticated] = useState(null); // เริ่มต้นเป็น null เพื่อแสดงว่าเรายังไม่รู้สถานะการพิสูจน์ตัวตน
+  const [isAuthenticated, setIsAuthenticated] = useState(null);
+   // เริ่มต้นเป็น null เพื่อแสดงว่าเรายังไม่รู้สถานะการพิสูจน์ตัวตน
 
   // const TKs = localStorage.getItem('accessToken');
 

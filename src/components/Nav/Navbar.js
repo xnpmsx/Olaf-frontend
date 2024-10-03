@@ -1,40 +1,73 @@
 import React from 'react'
 import '../../App.css'
 import { NavLink } from 'react-router-dom';
+import useAuth from '../../hook/useAuth';
 
 export default function Navbar() {
-    const TKs = sessionStorage.getItem('accessToken');
+
+    const { user } = useAuth()
+    // const status = localStorage.getItem('us');
 
     return (
         <>
-            <nav className="navbar border-bottom border-dark" 
-            style={{background:'none',fontWeight:'bold'}}>
+            <nav className="navbar border-bottom border-dark"
+                style={{ background: 'none', fontWeight: 'bold' }}>
                 <div className='container-fluid'>
-                    <span className="crimson-text-bold-italic" 
-                        style={{fontSize:"30px"}}>
+                    <span className="crimson-text-bold-italic" style={{ fontSize: "30px" }}>
                         OLAF.
                     </span>
 
-                <div className='d-flex'>
-                    <button className='btn btn-success m-1'
-                        style={TKs? {display:'none'}:{fontSize:'16px'}}>Sing up
-                        </button>
+                    <div className='d-flex'>
+                        {/* Signup Button */}
+                        {!user.email && (
+                            <button className='btn btn-success m-1' style={{ fontSize: '16px' }}>
+                                <NavLink className='nav-link' to='/auth/register'>
+                                    Sign up
+                                </NavLink>
+                            </button>
+                        )}
 
-                    <button className='btn btn-outline-dark m-1' 
-                        style={TKs? {display:'none'}:{fontSize:'16px'}} >
-                        <NavLink className={'nav-link'} to={'/auth/login'}>Sing in</NavLink>
-                    </button>
+                        {/* Signin Button */}
+                        {!user.email && (
+                            <button className='btn btn-outline-dark m-1' style={{ fontSize: '16px' }}>
+                                <NavLink className='nav-link' to='/auth/login'>
+                                    Sign in
+                                </NavLink>
+                            </button>
+                        )}
 
-                    <button className='btn btn-outline-dark m-1' 
-                        style={TKs? {display:'none'}:{fontSize:'16px'}} >
-                        <NavLink className={'nav-link'} to={'/auth/user'}>
-                            Logout
-                        </NavLink>
-                    </button>
-                </div>
-                    
+                        {/* User Profile Dropdown */}
+                        {user.email && (
+                            <div className="btn-group">
+                                <button className='btn btn-outline-white m-1' type="button"
+                                    id="dropdownMenu2" data-bs-toggle="dropdown" aria-expanded="false"
+                                    style={{ fontSize: '16px' }}>
+                                    <i className="bi bi-person-circle"></i> {user.username}
+                                </button>
+                                <ul className="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenu2">
+                                <li>
+                                    <NavLink className='dropdown-item' to='/profile'>
+                                    Profile
+                                    </NavLink>
+                                </li>
+                                <li>
+                                    <NavLink className='dropdown-item' to='/settings'>
+                                    Settings
+                                    </NavLink>
+                                </li>
+                                <li>
+                                    <NavLink className='dropdown-item' to='/auth/user'>
+                                    Logout
+                                    </NavLink>
+                                </li>
+                                </ul>
+                          </div>
+                          
+                        )}
+                    </div>
                 </div>
             </nav>
+
         </>
     )
 }

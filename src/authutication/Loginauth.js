@@ -8,7 +8,7 @@ export default function Loginauth() {
     const { setAccessToken, setCSRFToken } = useAuth()
     const navigate = useNavigate()
     const location = useLocation()
-    const fromLocation = location?.state?.from?.pathname || '/'
+    const fromLocation = location?.state?.from?.pathname || '/Feed'
     const [loading, setLoading] = useState(false)
     const [email, setEmail] = useState()
     const [password, setPassword] = useState()
@@ -21,7 +21,8 @@ export default function Loginauth() {
         setLoading(true)
 
         try {
-            const response = await axiosInstance.post('auth/login', JSON.stringify({
+            const response = await axiosInstance.post('auth/login', 
+              JSON.stringify({
                 email,
                 password
             }))
@@ -31,8 +32,11 @@ export default function Loginauth() {
             setEmail()
             setPassword()
             setLoading(false)
-            console.log(response?.data?.access_token);
-            console.log(response.headers["x-csrftoken"]);
+
+            localStorage.setItem('us' , true) //user status
+        
+            // console.log(response?.data?.access_token);
+            // console.log(response.headers["x-csrftoken"]);
 
             navigate(fromLocation, { replace: true })
         } catch (error) {

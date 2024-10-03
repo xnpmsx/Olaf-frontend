@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from 'react'
-import Navbar from '../components/Nav/Navbar'
+// import Navbar from '../components/Nav/Navbar'
 import Navtype from '../components/Nav/Navtype'
 import Footer from '../components/Footer';
 import { Iconpath } from '../components/Iconpath';
-import { Navigate } from 'react-router-dom';
+// import { Navigate } from 'react-router-dom';
+import  { useRedirect }  from '../hook/redirect/useRedirect';
+import ShareButtons from '../hook/shares/ShareButtons';
 const baseUrl = process.env.REACT_APP_BASE_URL;
 
 export default function Feed() {
+  const redirectx = useRedirect();
   const [p_data, setp_data] = useState([]);
   const [imgSrc, setImgSrcs] = useState([]);
   const [error, setError] = useState(null); 
@@ -15,9 +18,10 @@ export default function Feed() {
   const Like = Ic[1]
   const comment = Ic[2]
 
-  const redirect = (s) =>{
-    window.location.href =`/view/${s}`
-  }
+  // const redirect = (s) =>{
+  //   window.location.href =`/vFeed/${s}`
+  // }
+  
   useEffect(() => {
     const fetchPosts = async () => {
       try {
@@ -97,8 +101,6 @@ export default function Feed() {
     fetchPosts();
   }, []);
   
- 
-
   return (
     <>
       
@@ -108,24 +110,29 @@ export default function Feed() {
             <br />
             <Navtype /><br />
 
-            <h1 style={{ textAlign: 'center', fontWeight: 'bold' }}>Explore topics</h1><br />
+            <h1 style={{ textAlign: 'center', 
+              fontWeight: 'bold' }}>
+                Explore topics
+              </h1><br />
 
             <div className='container'>
               <center>
                 <div class="input-group mb-3 " style={{ width: '75%' }}>
-                  <span class="input-group-text" id="basic-addon1"><i class="bi bi-search"></i></span>
+                  <span class="input-group-text" 
+                  id="basic-addon1"><i class="bi bi-search"></i></span>
                   <input className='form-control'
                     placeholder='Search . . .'
                   />
                 </div><br />
-                <p style={{ fontSize: '16px' }}>Reccommend : Programming Data Science Technology</p>
+                <p style={{ fontSize: '16px' }}>
+                  Reccommend : Programming Data Science Technology
+                </p>
               </center>
             </div><br /><br /><br /><br />
 
           </div><hr />
 
           <div className='container' >
-
             <div className='row ' >
               {p_data ? (
                 p_data
@@ -141,7 +148,7 @@ export default function Feed() {
                                   cardimgcs1 '
                           src={imgSrc[index]}
                           alt='x'
-                          onClick={() => redirect(post.post_id)}
+                          onClick={() => redirectx(String(post.post_id))}
                         />
                         <div className='card-body'>
 
@@ -183,6 +190,8 @@ export default function Feed() {
                             />
 
                             <span className='card-text'> 15 </span>
+
+                            <ShareButtons url={`http://192.168.1.57:3000/vFeed/${post.post_id}`} title={`${post.header}`}/>
 
                           </p>
                         </div>

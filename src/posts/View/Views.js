@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import { Iconpath } from '../../components/Iconpath';
 import { useParams } from 'react-router-dom';
-import Navbar from '../../components/Nav/Navbar';
+// import Navbar from '../../components/Nav/Navbar';
 import './view.css'
 import Navtype from '../../components/Nav/Navtype';
+import {  axiosInstanceGet } from '../../axios';
 
 export default function View() {
   const { id } = useParams(); // รับ id จาก URL path
@@ -11,38 +12,34 @@ export default function View() {
   const [error, setError] = useState(null);
   const Ic = Iconpath();
 
-
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await fetch(`http://127.0.0.1:8000/api/posts/${id}/`, {
-          method: 'GET',
-        });
-
-        if (!response.ok) {
-          throw new Error('Fetching post failed');
+        const response = await axiosInstanceGet.get(`posts/${id}/`); // เรียก API โดยใช้ Axios
+  
+        // ตรวจสอบสถานะของการตอบกลับ
+        if (response.status !== 200) {
+          throw new Error('Fetching post failed'); // ถ้าสถานะไม่ใช่ 200 ให้โยนข้อผิดพลาด
         }
-
-        const data = await response.json();
-        setp_data(data); // เก็บข้อมูลที่ดึงมาใน state
-
+        setp_data(response.data); // เก็บข้อมูลที่ดึงมาใน state
+  
       } catch (error) {
         console.error('Error:', error);
-        setError('Fetching post failed. Please try again.');
+        setError('Fetching post failed. Please try again.'); 
+        // แสดงข้อผิดพลาดถ้ามี
       }
     };
-
     fetchUserData(); // ดึงข้อมูลเมื่อ component mount หรือ id เปลี่ยน
   }, [id]); // id จะเปลี่ยนเมื่อ URL path เปลี่ยน
+  
 
   if (error) {
-    return <div>{error}</div>;
+    return (<><div className='container'><h3>{error}</h3></div></>)
   }
 
   return (
     <>
-
-      <Navbar /><br />
+      {/* <Navbar /><br /> */}<br/>
       <Navtype />
       <div className={window.innerWidth <= 425 ? 'container-fluid' :
         'container border border-dark shadow-sm rounded glasx'}>
