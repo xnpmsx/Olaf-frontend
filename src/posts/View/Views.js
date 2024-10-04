@@ -5,6 +5,7 @@ import { useParams } from 'react-router-dom';
 import './view.css'
 import Navtype from '../../components/Nav/Navtype';
 import {  axiosInstanceGet } from '../../axios';
+import Comment from '../CommentPost/Comment';
 
 export default function View() {
   const { id } = useParams(); // รับ id จาก URL path
@@ -41,6 +42,7 @@ export default function View() {
     <>
       {/* <Navbar /><br /> */}<br/>
       <Navtype />
+
       <div className={window.innerWidth <= 425 ? 'container-fluid' :
         'container border border-dark shadow-sm rounded glasx'}>
         <div className={window.innerWidth <= 425 ? 'd-flex justify-content-center' : ''}>
@@ -130,7 +132,13 @@ export default function View() {
                 <i class="bi bi-person-circle"></i>
                 &nbsp;Written by {p_data.user}
               </p>
+
+              <Comment post_id={p_data.post_id} />
+
             </div>
+
+            
+
           </div>
         </div>
       </div>

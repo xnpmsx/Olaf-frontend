@@ -31,6 +31,7 @@ export default function User() {
 
     return (
         <div>
+            <h3>{user?.id}</h3>
             <h3>{user?.username}</h3>
             <h4>{user?.email}</h4>
             <button disabled={loading} type='button' onClick={onLogout}>Logout</button>

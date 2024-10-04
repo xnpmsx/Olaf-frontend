@@ -2,11 +2,9 @@ import React from 'react';
 // import Navbar from '../components/Nav/Navbar';
 // import Mininav from '../components/Nav/Mininav';
 import Footer from '../components/Footer';
+import { NavLink } from 'react-router-dom';
 
 export default function Home() {
-
-
-
   return (
     <>
       {/* <Navbar /> */}
@@ -27,7 +25,9 @@ export default function Home() {
 
             <button className='btn btn-dark 
               crimson-text-regular'>
-              Start to werite
+                <NavLink to='/feed' className='nav-link'>
+                  Start to werite
+                </NavLink>
             </button>
 
           </div>
