@@ -3,8 +3,8 @@ import React, { useEffect, useState } from 'react';
 import Footer from '../components/Footer';
 import { NavLink } from 'react-router-dom';
 import useAuth from '../hook/useAuth';
-import { useRedirect } from '../hook/redirect/useRedirect';
-import ShareButtons from '../hook/shares/ShareButtons';
+// import { useRedirect } from '../hook/redirect/useRedirect';
+// import ShareButtons from '../hook/shares/ShareButtons';
 import { Iconpath } from '../components/Iconpath';
 const baseUrl = process.env.REACT_APP_BASE_URL;
 
@@ -124,8 +124,6 @@ export default function Profile() {
     fetchPosts();
   }, []); // You can add dependencies if needed
   // Make sure to re-run when user.username changes
-
-
   return (
     <>
       {/* <Navbar /> */}
@@ -138,9 +136,10 @@ export default function Profile() {
               </h2>
             </div>
 
-
             <div className='col '><br />
-              <h5 style={{ fontWeight: 'bold' }}>Recent Articles</h5><br />
+              <h5 style={{ fontWeight: 'bold' }}>
+                Recent Articles
+              </h5><br />
 
               {p_data ? (
                 p_data.map((post, index) => (<>
@@ -201,7 +200,7 @@ export default function Profile() {
                         <span className='card-text'> 15 </span>
                       </p>
                     </div>
-                  </div>
+                  </div><br/>
                 </>
                 ))
               ) : (
@@ -219,6 +218,15 @@ export default function Profile() {
                 alt='profile'
                 style={{ borderRadius: '50%', width: '150px', height: '150px' }}
               /><br /><br />
+
+              <button className='btn btn-dark btn-lg'>
+                <NavLink className='nav-link' to='/addcontent'>
+                  werite content +
+                </NavLink>
+              </button>
+              <br/>
+              <br/>
+              
 
               <NavLink className='nav-link' to='/' style={{ color: 'green' }}>
                 Edit profile

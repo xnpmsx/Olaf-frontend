@@ -24,8 +24,10 @@ export default function Navbar() {
                                 <NavLink className='nav-link' to='/auth/register'>
                                     Sign up
                                 </NavLink>
-                            </button>
+                            </button> 
                         )}
+                            
+                    
 
                         {/* Signin Button */}
                         {!user.email && (
@@ -35,6 +37,16 @@ export default function Navbar() {
                                 </NavLink>
                             </button>
                         )}
+
+                        {user.email && (
+                            <button className='btn btn-outline-dark m-1' style={{ fontSize: '16px' }}>
+                                <NavLink className='nav-link' to='/addcontent'>
+                                    werite +
+                                </NavLink>
+                            </button>
+                        )}
+                            
+                    
 
                         {/* User Profile Dropdown */}
                         {user.email && (
@@ -50,20 +62,22 @@ export default function Navbar() {
                                     Profile
                                     </NavLink>
                                 </li>
-                                <li>
+                                {/* <li>
                                     <NavLink className='dropdown-item' to='/settings'>
                                     Settings
                                     </NavLink>
-                                </li>
+                                </li> */}
                                 <li>
                                     <NavLink className='dropdown-item' to='/auth/user'>
                                     Logout
                                     </NavLink>
                                 </li>
                                 </ul>
-                          </div>
-                          
+                          </div> 
                         )}
+                            
+                          
+                    
                     </div>
                 </div>
             </nav>

@@ -11,24 +11,16 @@ import PersistLogin from './components/PersistLogin';
 // import Hometest from './pages/Hometest';
 import Navbar from './components/Nav/Navbar';
 import Profile from './pages/Profile';
+import Addcontent from './userview/Addcontent';
 // import ProtectedRoute from './authutication/ProtectedRoute';
 
-
 function App() {
-
-  const status = localStorage.getItem('us');
-  const navigate = useNavigate()
-
-  useEffect(() => {if(status === true){navigate('/')}}, [status]) 
-     
   return <>
-    {/* เรียกใช้งาน Navbar ซึ่งเป็น navigation bar สำหรับแอป */}
     <Navbar />
     
     {/* การกำหนดเส้นทาง (Routing) สำหรับหน้าเว็บ */}
     <Routes>
-      
-
+    
       {/* เส้นทางหลัก '/' จะทำงานร่วมกับ PersistLogin เพื่อคงสถานะการล็อกอินไว้ */}
       <Route path='/' element={<PersistLogin />}>
 
@@ -54,8 +46,14 @@ function App() {
 
         {/* เส้นทาง Feed จะทำงานร่วมกับ AuthMiddleware เพื่อป้องกันไม่ให้ผู้ใช้ที่ไม่ได้ล็อกอินเข้าถึง Feed */}
         <Route element={<AuthMiddleware />}>
+
           <Route path='/Feed' element={<Feed />} />
+
           <Route path='/profile' element={<Profile />}/>
+
+          {/* เพิ่มPost content */}
+          <Route path='/addcontent' element={<Addcontent />}/>
+          
         </Route>
 
         <Route path='/vFeed/:id' element={<View />}></Route>
