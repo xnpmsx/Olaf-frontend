@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 // import Navbar from '../components/Navbar';
-import Footer from '../components/Footer';
+// import Footer from '../components/Footer';
 import { NavLink } from 'react-router-dom';
 import useAuth from '../hook/useAuth';
 // import { useRedirect } from '../hook/redirect/useRedirect';
@@ -216,7 +216,11 @@ export default function Profile() {
               <img
                 src='https://via.placeholder.com/150'
                 alt='profile'
-                style={{ borderRadius: '50%', width: '150px', height: '150px' }}
+                style={{ 
+                  borderRadius: '50%', 
+                  width: '150px',
+                  height: '150px' 
+                }}
               /><br /><br />
 
               <button className='btn btn-dark btn-lg'>
@@ -228,7 +232,8 @@ export default function Profile() {
               <br/>
               
 
-              <NavLink className='nav-link' to='/' style={{ color: 'green' }}>
+              <NavLink className='nav-link' to='/' 
+                style={{ color: 'green' }}>
                 Edit profile
               </NavLink>
             </div>

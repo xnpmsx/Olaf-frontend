@@ -19,9 +19,11 @@
     background-position-y: 50vh ;
     background-size: 260px 250px; /* กำหนดขนาดของรูป 200px x 200px */
 }
-
 .swx{
-    width: 35vw;
+    width: 70%;
+}
+.swx-comment{
+    width: 50%;
 }
 .glasx{
     /* From https://css.glass */

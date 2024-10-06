@@ -6,11 +6,10 @@ import useAuth from '../../hook/useAuth';
 export default function Navbar() {
 
     const { user } = useAuth()
-    // const status = localStorage.getItem('us');
 
     return (
         <>
-            <nav className="navbar border-bottom border-dark"
+            <nav className="navbar border-bottom border-dark border-opacity-10"
                 style={{ background: 'none', fontWeight: 'bold' }}>
                 <div className='container-fluid'>
                     <span className="crimson-text-bold-italic" style={{ fontSize: "30px" }}>

@@ -4,35 +4,42 @@ import { useParams } from 'react-router-dom';
 // import Navbar from '../../components/Nav/Navbar';
 import './view.css'
 import Navtype from '../../components/Nav/Navtype';
-import {  axiosInstanceGet } from '../../axios';
+import { axiosInstanceGet } from '../../axios';
 import Comment from '../CommentPost/Comment';
+import PullUsers from '../../hook/pullusers/Pullusers';
+import ShareButtons from '../../hook/shares/ShareButtons';
 
 export default function View() {
   const { id } = useParams(); // รับ id จาก URL path
   const [p_data, setp_data] = useState([]);
   const [error, setError] = useState(null);
   const Ic = Iconpath();
+  const [commentsCount, setCommentsCount] = useState(0);
+
+  const handleCommentsCountChange = (count) => {
+    setCommentsCount(count);
+  };
 
   useEffect(() => {
     const fetchUserData = async () => {
       try {
         const response = await axiosInstanceGet.get(`posts/${id}/`); // เรียก API โดยใช้ Axios
-  
+
         // ตรวจสอบสถานะของการตอบกลับ
         if (response.status !== 200) {
           throw new Error('Fetching post failed'); // ถ้าสถานะไม่ใช่ 200 ให้โยนข้อผิดพลาด
         }
         setp_data(response.data); // เก็บข้อมูลที่ดึงมาใน state
-  
+
       } catch (error) {
         console.error('Error:', error);
-        setError('Fetching post failed. Please try again.'); 
+        setError('Fetching post failed. Please try again.');
         // แสดงข้อผิดพลาดถ้ามี
       }
     };
     fetchUserData(); // ดึงข้อมูลเมื่อ component mount หรือ id เปลี่ยน
   }, [id]); // id จะเปลี่ยนเมื่อ URL path เปลี่ยน
-  
+
 
   if (error) {
     return (<><div className='container'><h3>{error}</h3></div></>)
@@ -40,13 +47,21 @@ export default function View() {
 
   return (
     <>
-      {/* <Navbar /><br /> */}<br/>
-      <Navtype />
+      {/* <Navbar /><br /> */}
+      <br />
+      {/* <Navtype /> */}
 
-      <div className={window.innerWidth <= 425 ? 'container-fluid' :
-        'container border border-dark shadow-sm rounded glasx'}>
-        <div className={window.innerWidth <= 425 ? 'd-flex justify-content-center' : ''}>
-          <div className={window.innerWidth <= 426 ? '' : 'swx container'} >
+      <div className={
+        window.innerWidth <= 425 ?
+          'container-fluid' :
+          'container glasx'}>
+        <div className={
+          window.innerWidth <= 425 ?
+            'd-flex justify-content-center' : 'd-flex justify-content-center'}>
+          <div className={
+            window.innerWidth <= 426 ?
+              '' : 'swx '
+          } >
             <br />
 
             <h1 class=""
@@ -59,46 +74,48 @@ export default function View() {
               {p_data.short}
             </p>
 
-            <p className='border-top border-bottom border-dark  p-2'
-              style={{ fontSize: '16px' }}>
-              <i class="bi bi-person-circle"></i>
-              &nbsp;{p_data.user}
+            <p className='border-top border-bottom border-dark p-2 border-opacity-25' style={{ fontSize: '16px',}}>
+              <div className='row align-items-center'>
+                <div className='col d-flex align-items-center'>
+                  <i className="bi bi-person-circle"></i>&nbsp; 
+                  {p_data.user ? (  // ตรวจสอบว่ามีค่า user ใน p_data หรือไม่
+                      <PullUsers ids={p_data.user} />  // ใช้ id แทน ids
+                    ) : (
+                      <span>User ID not available</span>  // ข้อความเมื่อไม่มี user
+                    )} 
+                </div>
+
+                <div className='col d-flex justify-content-end align-items-center'>
+                  <img className='iconsize me-2' src={Ic[0]} alt='x' />
+                  <span style={{  marginRight: '10px' }}>
+                    {new Date(p_data.post_datetime).toLocaleDateString('en-GB', {
+                      day: '2-digit',
+                      month: 'short',
+                      year: 'numeric'
+                    })}
+                  </span>
+
+                  <img className='iconsize me-2' src={Ic[1]} alt='x' />
+                  <span className='me-3'>1.5k</span>
+
+                  <img className='iconsize me-2' src={Ic[2]} alt='x' />
+                  <span>{commentsCount}</span>
+                </div>
+
+                
+              </div>
+              
             </p>
 
-            <p className=''
-              style={{ fontSize: '12px' }}>
-
-              <img className='m-1 iconsize'
-                src={Ic[0]}
-                alt='x'
-              />
-
-              <span className=''
-                style={{ fontWeight: 'bold' }}>
-                {p_data.post_datetime}
-              </span>
-
-              <img className='m-1 iconsize'
-                src={Ic[1]}
-                alt='x'
-              />
-
-              <span className=''> 1.5k </span>
-
-              <img className='m-1 iconsize'
-                src={Ic[2]}
-                alt='x'
-              />
-
-              <span className=''> 15 </span>
-
-            </p>
           </div>
+          
+          
         </div>
 
         <div className='d-flex justify-content-center'>
-          <img className=''
-            src={p_data.image || 'https://miro.medium.com/v2/resize:fit:1100/format:webp/1*1Eq0WTubrn1gd_NofdVtJg.png'}
+          <img className='rounded shadow-sm'
+            src={p_data.image ||
+              'https://miro.medium.com/v2/resize:fit:1100/format:webp/1*1Eq0WTubrn1gd_NofdVtJg.png'}
             alt='x'
             style={{ width: '70%' }}
           />
@@ -109,14 +126,25 @@ export default function View() {
             <p className='crimson-text-regular' style={{ fontSize: '24px' }}>
               {p_data.post_text}
             </p>
+              <div>
+              <ShareButtons
+                url={`http://192.168.1.57:3000/vFeed/${p_data.post_id}`}
+                title={`${p_data.header}`} />
+            </div>
           </div>
+
+          
+
         </div>
+        
+        
+        
 
       </div>
 
       <br />
 
-      <div style={{backgroundColor:'whitesmoke'}}>
+      <div style={{ backgroundColor: 'whitesmoke' }}>
         <div className={window.innerWidth <= 425 ?
           'container-fluid' :
           'container-fluid   glasx'}>
@@ -125,20 +153,21 @@ export default function View() {
             'd-flex justify-content-center' : ''}>
 
             <div className={window.innerWidth <= 426 ?
-              '' : 'swx container'} >
+              '' : 'swx-comment container'} >
               <br />
               <p className='p-2'
                 style={{ fontSize: '16px' }}>
                 <i class="bi bi-person-circle"></i>
-                &nbsp;Written by {p_data.user}
+                &nbsp;Written by {p_data.user ? (  // ตรวจสอบว่ามีค่า user ใน p_data หรือไม่
+                      <PullUsers ids={p_data.user} />  // ใช้ id แทน ids
+                    ) : (
+                      <span>User ID not available</span>  // ข้อความเมื่อไม่มี user
+                    )} 
               </p>
 
-              <Comment post_id={p_data.post_id} />
+              <Comment post_id={p_data.post_id} onCommentsCountChange={handleCommentsCountChange} />
 
             </div>
-
-            
-
           </div>
         </div>
       </div>

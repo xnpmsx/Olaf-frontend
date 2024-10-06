@@ -4,6 +4,7 @@ import * as Yup from 'yup';
 import axios from 'axios';
 import { Iconpath } from '../components/Iconpath';
 import useAuth from '../hook/useAuth';
+import { useLocation, useNavigate } from 'react-router-dom';
 const baseUrl = process.env.REACT_APP_BASE_URL;
 
 // Validation Schema using Yup
@@ -16,6 +17,9 @@ const form = Yup.object().shape({
 
 const Addcontent = () => { 
   const { user } = useAuth()
+  const navigate = useNavigate()
+  const location = useLocation()
+  const fromLocation = location?.state?.from?.pathname || '/Profile'
   const [message, setMessage] = useState(''); 
   const Ic = Iconpath();
 
@@ -48,6 +52,7 @@ const Addcontent = () => {
       });
       setMessage('Post created successfully!');
       resetForm();
+      navigate(fromLocation, { replace: true })
       } catch (error) {
         console.error('Error creating post:', error);
         setMessage('Failed to create post. Please try again.');
